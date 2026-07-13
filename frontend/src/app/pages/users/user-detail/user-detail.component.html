@@ -1,0 +1,81 @@
+<div class="header-actions">
+  <div class="header-title">
+    <a routerLink="/users" class="back-link">← BACK TO USERS</a>
+    <h2>USER PROFILE</h2>
+  </div>
+  <div class="header-right" *ngIf="user">
+    <a mat-stroked-button [routerLink]="['/users', user.id, 'edit']">
+      <mat-icon>edit</mat-icon> EDIT
+    </a>
+    <button mat-stroked-button color="warn" (click)="resetPassword()">
+      <mat-icon>lock_reset</mat-icon> RESET PASSWORD
+    </button>
+  </div>
+</div>
+
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+<div *ngIf="user && !loading" class="profile-grid">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>{{ user.displayName || user.username }}</mat-card-title>
+      <mat-card-subtitle>{{ user.jobtitle || 'No job title' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email || 'N/A' }}</p>
+      <p><strong>Employee #:</strong> {{ user.employeeNum || 'N/A' }}</p>
+      <p><strong>Phone:</strong> {{ user.phone || 'N/A' }}</p>
+      <p><strong>Department:</strong> {{ user.departmentName || 'N/A' }}</p>
+      <p><strong>Location:</strong> {{ user.locationName || 'N/A' }}</p>
+      <p class="chip-row">
+        <strong>Status:</strong>
+        <mat-chip-set>
+          <mat-chip [class.chip-active]="user.activated" [class.chip-inactive]="!user.activated">
+            {{ user.activated ? 'ACTIVE' : 'DISABLED' }}
+          </mat-chip>
+          <mat-chip *ngIf="user.vip" class="chip-vip">VIP</mat-chip>
+        </mat-chip-set>
+      </p>
+      <p><strong>Last login:</strong> {{ user.lastLogin ? (user.lastLogin | date:'medium') : 'Never' }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="items-card">
+    <mat-tab-group>
+      <mat-tab label="Assets ({{ items?.assets?.length || 0 }})">
+        <mat-list>
+          <mat-list-item *ngFor="let a of items?.assets">
+            <mat-icon matListItemIcon>devices</mat-icon>
+            <div matListItemTitle>
+              <a [routerLink]="['/assets', a.id]">{{ a.name || a.assetTag }}</a>
+            </div>
+            <div matListItemLine>Tag: {{ a.assetTag }} · Serial: {{ a.serial || 'N/A' }}</div>
+          </mat-list-item>
+        </mat-list>
+        <p *ngIf="!items?.assets?.length" class="empty-tab">No assigned assets.</p>
+      </mat-tab>
+
+      <mat-tab label="Licenses ({{ items?.licenses?.length || 0 }})">
+        <mat-list>
+          <mat-list-item *ngFor="let l of items?.licenses">
+            <mat-icon matListItemIcon>vpn_key</mat-icon>
+            <div matListItemTitle>{{ l.name }}</div>
+            <div matListItemLine>Serial: {{ l.serial || 'N/A' }}</div>
+          </mat-list-item>
+        </mat-list>
+        <p *ngIf="!items?.licenses?.length" class="empty-tab">No assigned licenses.</p>
+      </mat-tab>
+
+      <mat-tab label="Accessories ({{ items?.accessories?.length || 0 }})">
+        <mat-list>
+          <mat-list-item *ngFor="let ac of items?.accessories">
+            <mat-icon matListItemIcon>headset</mat-icon>
+            <div matListItemTitle>{{ ac.name }}</div>
+          </mat-list-item>
+        </mat-list>
+        <p *ngIf="!items?.accessories?.length" class="empty-tab">No assigned accessories.</p>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

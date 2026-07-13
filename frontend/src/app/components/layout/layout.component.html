@@ -1,0 +1,149 @@
+<mat-sidenav-container class="app-layout" [hasBackdrop]="false">
+  
+  <!-- Sidebar -->
+  <mat-sidenav 
+    #sidenav 
+    mode="side" 
+    [opened]="true" 
+    [class.collapsed]="isSidebarCollapsed"
+    class="sidebar">
+    
+    <div class="sidebar-header">
+      <div class="logo">
+        <mat-icon class="logo-icon">inventory_2</mat-icon>
+        <span class="logo-text" *ngIf="!isSidebarCollapsed">SNIPE-IT</span>
+      </div>
+    </div>
+
+    <mat-nav-list class="nav-menu">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-nav-item">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle *ngIf="!isSidebarCollapsed">Dashboard</span>
+      </a>
+      
+      <div class="nav-section-title" *ngIf="!isSidebarCollapsed">Assets</div>
+      <a mat-list-item routerLink="/assets" routerLinkActive="active-nav-item">
+        <mat-icon matListItemIcon>devices</mat-icon>
+        <span matListItemTitle *ngIf="!isSidebarCollapsed">All Assets</span>
+      </a>
+      
+      <div class="nav-section-title" *ngIf="!isSidebarCollapsed">Inventory</div>
+      <a mat-list-item routerLink="/licenses" routerLinkActive="active-nav-item">
+        <mat-icon matListItemIcon>key</mat-icon>
+        <span matListItemTitle *ngIf="!isSidebarCollapsed">Licenses</span>
+      </a>
+      <a mat-list-item routerLink="/accessories" routerLinkActive="active-nav-item">
+        <mat-icon matListItemIcon>keyboard</mat-icon>
+        <span matListItemTitle *ngIf="!isSidebarCollapsed">Accessories</span>
+      </a>
+      
+      <ng-container *ngIf="isAdmin">
+        <div class="nav-section-title" *ngIf="!isSidebarCollapsed">Administration</div>
+        <a mat-list-item routerLink="/categories" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>category</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Categories</span>
+        </a>
+        <a mat-list-item routerLink="/manufacturers" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>factory</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Manufacturers</span>
+        </a>
+        <a mat-list-item routerLink="/models" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>view_in_ar</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Models</span>
+        </a>
+        <a mat-list-item routerLink="/suppliers" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>local_shipping</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Suppliers</span>
+        </a>
+        <a mat-list-item routerLink="/status-labels" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>label</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Status Labels</span>
+        </a>
+        <a mat-list-item routerLink="/locations" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>location_on</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Locations</span>
+        </a>
+        
+        <div class="nav-section-title" *ngIf="!isSidebarCollapsed">People</div>
+        <a mat-list-item routerLink="/departments" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>domain</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Departments</span>
+        </a>
+        <a mat-list-item routerLink="/companies" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>business</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Companies</span>
+        </a>
+        <a mat-list-item routerLink="/users" routerLinkActive="active-nav-item">
+          <mat-icon matListItemIcon>group</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Users</span>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+
+    <div class="sidebar-footer">
+      <mat-nav-list class="nav-menu">
+        <a mat-list-item (click)="logout()" class="logout-btn">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle *ngIf="!isSidebarCollapsed">Logout</span>
+        </a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+  <!-- Main Content -->
+  <mat-sidenav-content class="main-content">
+    
+    <!-- Top Toolbar -->
+    <mat-toolbar class="topbar">
+      <div class="topbar-left">
+        <button mat-icon-button (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <!-- Breadcrumbs could go here -->
+      </div>
+      
+      <div class="topbar-right">
+        <div class="global-search">
+          <mat-icon>search</mat-icon>
+          <input type="text" placeholder="Search assets, users, licenses..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+        </div>
+        
+        
+        
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-profile-btn">
+          <div class="user-profile">
+            <div class="avatar">
+              {{ username ? username.charAt(0).toUpperCase() : 'U' }}
+            </div>
+            <div class="user-info">
+              <span class="username" *ngIf="username">{{ username }}</span>
+            </div>
+            <mat-icon>expand_more</mat-icon>
+          </div>
+        </button>
+        
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item routerLink="/users">
+            <mat-icon>account_circle</mat-icon>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item routerLink="/users">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </mat-toolbar>
+    
+    <!-- Page Content -->
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+    
+  </mat-sidenav-content>
+</mat-sidenav-container>

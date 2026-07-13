@@ -1,0 +1,70 @@
+<div class="login-container">
+  
+  <!-- Left Illustration Panel (Desktop only) -->
+  <div class="illustration-panel">
+    <div class="shape-1"></div>
+    <div class="shape-2"></div>
+    
+    <div class="illustration-content">
+      <mat-icon class="illustration-icon">admin_panel_settings</mat-icon>
+      <h2>Manage Assets Efficiently</h2>
+      <p>Track, Audit and Secure Your IT Inventory with our enterprise-grade management platform.</p>
+    </div>
+  </div>
+
+  <!-- Right Login Panel -->
+  <div class="login-panel">
+    <div class="login-card" [@fadeInUp] [class.shake-animation]="shakeError">
+      
+      <div class="login-header">
+        <div class="logo-container">
+          <mat-icon>inventory_2</mat-icon>
+        </div>
+        <h1>Digitech</h1>
+        <div class="subtitle">IT Asset Management</div>
+      </div>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Email or Username</mat-label>
+          <input matInput formControlName="username" placeholder="Enter username" required>
+          <mat-icon matPrefix>person_outline</mat-icon>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" required>
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <a href="#" class="forgot-password" (click)="$event.preventDefault()">Forgot Password?</a>
+        </div>
+
+        <button mat-flat-button type="submit" class="submit-btn" [disabled]="loginForm.invalid || loading || success">
+          <span *ngIf="!loading && !success">Sign In</span>
+          
+          <div class="spinner-container" *ngIf="loading && !success">
+            <mat-spinner diameter="20"></mat-spinner>
+          </div>
+          <span *ngIf="loading && !success">Authenticating...</span>
+          
+          <mat-icon class="success-icon" *ngIf="success">check_circle</mat-icon>
+          <span *ngIf="success">Success!</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+</div>

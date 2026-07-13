@@ -1,0 +1,189 @@
+<div class="page-header flex-between mb-4">
+  <div class="header-title">
+    <a mat-button routerLink="/assets" class="back-link text-muted">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Assets
+    </a>
+    <h2>Asset Details</h2>
+  </div>
+  <div class="header-actions" *ngIf="asset && isAdmin">
+    <a mat-stroked-button [routerLink]="['/assets', asset.id, 'edit']" class="mr-2">
+      <mat-icon>edit</mat-icon> Edit
+    </a>
+    
+    <button mat-flat-button color="primary" *ngIf="!asset.assignedTo" (click)="checkoutAsset()" [disabled]="loading" class="mr-2">
+      <mat-icon>output</mat-icon> Checkout
+    </button>
+
+    <button mat-flat-button color="primary" *ngIf="asset.assignedTo" (click)="checkinAsset()" [disabled]="loading" class="mr-2">
+      <mat-icon>login</mat-icon> Checkin
+    </button>
+
+    <button mat-flat-button color="warn" (click)="deleteAsset()" [disabled]="deleting">
+      <mat-icon>delete</mat-icon> {{ deleting ? 'Deleting...' : 'Delete' }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="error" class="alert alert-error mb-3">
+  <mat-icon>error</mat-icon>
+  {{ error }}
+</div>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<div *ngIf="asset && !loading" class="detail-container">
+  
+  <mat-card class="detail-card mb-4">
+    <mat-card-header class="border-bottom pb-3">
+      <div mat-card-avatar class="asset-avatar">
+        <mat-icon>laptop_mac</mat-icon>
+      </div>
+      <mat-card-title class="d-flex align-items-center gap-3">
+        <h3 class="m-0">{{ asset.name }}</h3>
+        <mat-chip class="tag-badge">{{ asset.assetTag }}</mat-chip>
+      </mat-card-title>
+      <mat-card-subtitle>
+        Added on {{ asset.createdAt | date:'mediumDate' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content class="pt-4">
+      <div class="grid detail-grid">
+        <div class="data-group">
+          <label class="text-muted">Model ID</label>
+          <div class="data-value font-medium">{{ asset.modelId }}</div>
+        </div>
+        
+        <div class="data-group">
+          <label class="text-muted">Serial Number</label>
+          <div class="data-value">{{ asset.serial || '-' }}</div>
+        </div>
+
+        <div class="data-group">
+          <label class="text-muted">Status</label>
+          <div class="data-value">
+            <mat-chip [color]="asset.statusId === 1 ? 'primary' : 'warn'" highlighted>
+              {{ asset.statusId === 1 ? 'Ready to Deploy' : (asset.statusId || 'Not Set') }}
+            </mat-chip>
+          </div>
+        </div>
+        
+        <div class="data-group">
+          <label class="text-muted">Assigned To</label>
+          <div class="data-value">
+            <div class="user-cell" *ngIf="asset.assignedTo">
+              <div class="avatar-sm">
+                {{ asset.assignedToName ? asset.assignedToName.charAt(0).toUpperCase() : 'U' }}
+              </div>
+              <span>{{ asset.assignedToName || asset.assignedTo }}</span>
+            </div>
+            <span class="text-muted" *ngIf="!asset.assignedTo">Unassigned</span>
+          </div>
+        </div>
+      </div>
+      
+      <mat-divider class="my-4"></mat-divider>
+      
+      <div class="data-group">
+        <label class="text-muted">Notes</label>
+        <div class="data-value">{{ asset.notes || 'No additional notes provided.' }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabs for History, Files, Components etc -->
+  <mat-card class="tabs-card">
+    <mat-tab-group animationDuration="0ms">
+      <!-- History Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">history</mat-icon> History
+        </ng-template>
+        
+        <div class="tab-content">
+          <mat-progress-bar mode="indeterminate" *ngIf="historyLoading"></mat-progress-bar>
+          
+          <div *ngIf="historyError" class="p-4 text-center error-text">
+            {{ historyError }}
+          </div>
+          
+          <table mat-table [dataSource]="history" class="w-100" *ngIf="!historyLoading && !historyError && history.length > 0">
+            <!-- Date Column -->
+            <ng-container matColumnDef="actionDate">
+              <th mat-header-cell *matHeaderCellDef> Date </th>
+              <td mat-cell *matCellDef="let log" class="text-muted"> {{ log.actionDate | date:'short' }} </td>
+            </ng-container>
+
+            <!-- Admin Column -->
+            <ng-container matColumnDef="adminName">
+              <th mat-header-cell *matHeaderCellDef> Admin </th>
+              <td mat-cell *matCellDef="let log">
+                <div class="user-cell">
+                  <div class="avatar-sm">
+                    {{ log.adminName ? log.adminName.charAt(0).toUpperCase() : 'S' }}
+                  </div>
+                  <span>{{ log.adminName || 'System' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="actionType">
+              <th mat-header-cell *matHeaderCellDef> Action </th>
+              <td mat-cell *matCellDef="let log">
+                <span class="status-chip" 
+                      [ngClass]="{'info': log.actionType === 'checkout', 'success': log.actionType === 'checkin'}">
+                  {{ log.actionType | uppercase }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Target Column -->
+            <ng-container matColumnDef="targetName">
+              <th mat-header-cell *matHeaderCellDef> Target </th>
+              <td mat-cell *matCellDef="let log"> {{ log.targetName || '-' }} </td>
+            </ng-container>
+            
+            <!-- Notes Column -->
+            <ng-container matColumnDef="note">
+              <th mat-header-cell *matHeaderCellDef> Notes </th>
+              <td mat-cell *matCellDef="let log" class="text-muted small"> {{ log.note || '-' }} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedHistoryColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedHistoryColumns;"></tr>
+          </table>
+
+          <div *ngIf="!historyLoading && !historyError && history.length === 0" class="empty-state p-5">
+            <mat-icon class="empty-icon">history</mat-icon>
+            <p>No history records found for this asset.</p>
+          </div>
+        </div>
+      </mat-tab>
+      
+      <!-- Placeholder for Files/Attachments Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">attach_file</mat-icon> Files
+        </ng-template>
+        <div class="tab-content empty-state p-5">
+          <mat-icon class="empty-icon">folder_open</mat-icon>
+          <p>No files attached to this asset.</p>
+          <button mat-stroked-button color="primary" class="mt-3">Upload File</button>
+        </div>
+      </mat-tab>
+
+      <!-- Placeholder for Licenses Tab -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">workspace_premium</mat-icon> Licenses
+        </ng-template>
+        <div class="tab-content empty-state p-5">
+          <mat-icon class="empty-icon">key_off</mat-icon>
+          <p>No licenses checked out to this asset.</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

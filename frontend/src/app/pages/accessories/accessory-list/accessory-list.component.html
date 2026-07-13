@@ -1,0 +1,55 @@
+<div class="page-header flex-between mb-4">
+  <div>
+    <h2>Accessories</h2>
+    <p class="text-muted">Manage inventory accessories and assignments.</p>
+  </div>
+  <div class="header-actions">
+    <a mat-flat-button color="primary" *ngIf="isAdmin" routerLink="/accessories/new">
+      <mat-icon>add</mat-icon> Add Accessory
+    </a>
+  </div>
+</div>
+
+<div *ngIf="error" class="error-banner">
+  {{ error }}
+</div>
+
+<mat-card class="list-card">
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>QUANTITY</th>
+          <th>LOCATION ID</th>
+          <th *ngIf="isAdmin">ASSIGNED TO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading">
+          <td colspan="4" class="text-center">LOADING DATA...</td>
+        </tr>
+        <tr *ngIf="!loading && accessories.length === 0">
+          <td colspan="5" class="empty-state-cell text-center" style="padding: 48px !important;">
+            <div class="empty-state">
+              <mat-icon class="empty-icon text-muted" style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 16px;">keyboard</mat-icon>
+              <h3 style="margin-bottom: 8px;">No accessories found.</h3>
+              <p class="text-muted" style="margin-bottom: 16px;">Create your first accessory to begin tracking inventory.</p>
+              <a mat-flat-button color="primary" *ngIf="isAdmin" routerLink="/accessories/new">
+                Add Accessory
+              </a>
+            </div>
+          </td>
+        </tr>
+        <tr *ngFor="let acc of accessories">
+          <td><span class="badge">{{ acc.id }}</span></td>
+          <td>{{ acc.name || 'N/A' }}</td>
+          <td>{{ acc.qty }}</td>
+          <td>{{ acc.locationId || 'N/A' }}</td>
+          <td *ngIf="isAdmin">{{ acc.assignedUsers || 'None' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</mat-card>

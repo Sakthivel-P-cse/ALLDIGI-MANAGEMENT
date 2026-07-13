@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <div class="card mx-auto" style="max-width: 600px;">
+    <div class="card-header">
+      <h4>{{ isEdit ? 'Edit' : 'Create' }} Department</h4>
+    </div>
+    <div class="card-body">
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <form (ngSubmit)="onSubmit()" #form="ngForm">
+        <div class="mb-3">
+          <label class="form-label">Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="name" [(ngModel)]="model.name" required #nameField="ngModel">
+          <div *ngIf="nameField.invalid && nameField.touched" class="text-danger small">Name is required.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" name="notes" [(ngModel)]="model.notes" rows="3"></textarea>
+        </div>
+
+        <!-- Add more fields manually as needed -->
+
+        <div class="d-flex justify-content-end mt-4">
+          <button type="button" class="btn btn-secondary me-2" routerLink="/departments">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

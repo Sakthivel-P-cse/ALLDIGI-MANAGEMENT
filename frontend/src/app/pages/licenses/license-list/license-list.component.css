@@ -1,0 +1,20 @@
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.error-banner {
+  background-color: var(--error-bg);
+  color: var(--error);
+  font-family: var(--font-mono);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  font-weight: bold;
+}

@@ -1,0 +1,61 @@
+<div class="header-actions">
+  <h2>{{ pageTitle }}</h2>
+</div>
+
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+<div class="card">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="johndoe">
+        <mat-error *ngIf="userForm.get('username')?.hasError('required')">Username is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="john@example.com">
+        <mat-error *ngIf="userForm.get('email')?.hasError('email')">Enter a valid email address</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Job title</mat-label>
+        <input matInput formControlName="jobtitle">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="!isEdit">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password">
+        <mat-error *ngIf="userForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">At least 6 characters</mat-error>
+      </mat-form-field>
+
+      <div class="checkbox-cell">
+        <mat-checkbox formControlName="vip">VIP user</mat-checkbox>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" mat-stroked-button (click)="cancel()">CANCEL</button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="userForm.invalid || loading">
+        {{ loading ? 'SAVING...' : buttonText }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<div class="header-actions">
+  <h2>LICENSES</h2>
+  <div class="header-right">
+    <a *ngIf="isAdmin" routerLink="/licenses/new" class="btn btn-cyan">+ NEW LICENSE</a>
+  </div>
+</div>
+
+<div *ngIf="error" class="error-banner">
+  {{ error }}
+</div>
+
+<div class="card">
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>SERIAL</th>
+          <th>SEATS</th>
+          <th>PURCHASE COST</th>
+          <th *ngIf="isAdmin">ASSIGNED TO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="loading">
+          <td colspan="5" class="text-center">LOADING DATA...</td>
+        </tr>
+        <tr *ngIf="!loading && licenses.length === 0">
+          <td colspan="5" class="text-center">NO LICENSES FOUND.</td>
+        </tr>
+        <tr *ngFor="let license of licenses">
+          <td><span class="badge">{{ license.id }}</span></td>
+          <td>{{ license.name || 'N/A' }}</td>
+          <td>{{ license.serial || 'N/A' }}</td>
+          <td>{{ license.seats }}</td>
+          <td>{{ license.purchaseCost | currency }}</td>
+          <td *ngIf="isAdmin">{{ license.assignedUsers || 'None' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

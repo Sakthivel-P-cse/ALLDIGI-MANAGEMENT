@@ -1,0 +1,238 @@
+<div class="page-header flex-between mb-4">
+  <div>
+    <h2>Dashboard</h2>
+    <p class="text-muted">Welcome back, <span *ngIf="summary">{{ summary.recentActivity[0] ? summary.recentActivity[0].adminName : 'Admin' }}</span> 👋</p>
+  </div>
+  <div class="dashboard-date-picker">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+</div>
+
+<div *ngIf="error" class="alert alert-error">
+  {{ error }}
+</div>
+
+<mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+<div *ngIf="summary && !loading" class="dashboard-content">
+  
+  <!-- Row 1: High Level KPI Cards -->
+  <div class="grid kpi-grid mb-4">
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box primary-light">
+          <mat-icon color="primary">inventory_2</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Total Assets</h6>
+          <h2 class="kpi-value">{{ summary.totalAssets }}</h2>
+          <span class="kpi-trend success"><mat-icon>arrow_upward</mat-icon> 12 this month</span>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box warning-light">
+          <mat-icon class="warning-text">login</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Checked Out</h6>
+          <h2 class="kpi-value">{{ summary.assetsDeployed }}</h2>
+          <span class="kpi-trend warning"><mat-icon>arrow_upward</mat-icon> 5 this month</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box success-light">
+          <mat-icon class="success-text">check_circle</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Available</h6>
+          <h2 class="kpi-value">{{ summary.assetsReadyToDeploy }}</h2>
+          <span class="kpi-trend success"><mat-icon>arrow_upward</mat-icon> 7 this month</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box info-light">
+          <mat-icon color="primary">group</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Total Users</h6>
+          <h2 class="kpi-value">{{ summary.totalUsers }}</h2>
+          <span class="kpi-trend success"><mat-icon>arrow_upward</mat-icon> 3 this month</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box primary-light">
+          <mat-icon color="primary">workspace_premium</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Licenses</h6>
+          <h2 class="kpi-value">{{ summary.totalLicenses }}</h2>
+          <span class="kpi-trend success"><mat-icon>arrow_upward</mat-icon> 2 this month</span>
+        </div>
+      </div>
+    </mat-card>
+    
+    <mat-card class="kpi-card">
+      <div class="kpi-content">
+        <div class="kpi-icon-box error-light">
+          <mat-icon class="error-text">keyboard_alt</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <h6 class="kpi-title">Accessories</h6>
+          <h2 class="kpi-value">{{ summary.totalAccessories }}</h2>
+          <span class="kpi-trend error"><mat-icon>arrow_downward</mat-icon> 4 this month</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Row 2: Status & Activity -->
+  <div class="grid dashboard-row-2 mb-4">
+    <!-- Asset Status Donut Chart (CSS Mock) -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Assets by Status</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="status-chart-container">
+        <div class="donut-chart-mock">
+          <div class="donut-hole">
+            <h2>{{ summary.totalAssets }}</h2>
+            <span>Total</span>
+          </div>
+        </div>
+        <div class="status-legend">
+          <div class="legend-item"><span class="dot success-bg"></span> Available <span class="legend-val">{{ summary.assetsReadyToDeploy }}</span></div>
+          <div class="legend-item"><span class="dot primary-bg"></span> Checked Out <span class="legend-val">{{ summary.assetsDeployed }}</span></div>
+          <div class="legend-item"><span class="dot warning-bg"></span> Maintenance <span class="legend-val">{{ summary.assetsPending }}</span></div>
+          <div class="legend-item"><span class="dot text-secondary-bg"></span> Retired <span class="legend-val">{{ summary.assetsArchived }}</span></div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Recent Activity -->
+    <mat-card class="activity-card">
+      <mat-card-header class="flex-between w-100">
+        <mat-card-title>Recent Activity</mat-card-title>
+        <button mat-button color="primary" routerLink="/dashboard">View all</button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div class="activity-item" *ngFor="let log of summary.recentActivity">
+            <div class="activity-icon-container">
+              <div class="activity-icon" [ngClass]="{
+                'checkout-icon': log.actionType === 'checkout',
+                'checkin-icon': log.actionType === 'checkin',
+                'create-icon': log.actionType === 'create'
+              }">
+                <mat-icon *ngIf="log.actionType === 'checkout'">laptop_mac</mat-icon>
+                <mat-icon *ngIf="log.actionType === 'checkin'">assignment_return</mat-icon>
+                <mat-icon *ngIf="log.actionType === 'create'">person_add</mat-icon>
+              </div>
+            </div>
+            <div class="activity-details">
+              <p class="activity-text">
+                <strong>{{ log.targetName || log.itemType }}</strong> {{ log.actionType === 'checkout' ? 'checked out to' : (log.actionType === 'checkin' ? 'checked in from' : 'was added by') }} <strong>{{ log.adminName || 'System' }}</strong>
+              </p>
+              <span class="activity-time">{{ log.actionDate | date:'medium' }}</span>
+            </div>
+            <div class="activity-badge">
+              <span class="status-chip" [ngClass]="{
+                'info': log.actionType === 'checkout',
+                'success': log.actionType === 'checkin',
+                'warning': log.actionType === 'create'
+              }">{{ log.actionType | titlecase }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="summary.recentActivity.length === 0" class="empty-state">
+          <p>No recent activity logs found.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Row 3: Category Chart, Expirations, Quick Actions -->
+  <div class="grid dashboard-row-3">
+    <!-- Assets by Category (CSS Bar Chart Mock) -->
+    <mat-card>
+      <mat-card-header class="flex-between w-100">
+        <mat-card-title>Assets by Category</mat-card-title>
+        <button mat-button color="primary" routerLink="/categories">View report</button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="bar-chart-mock">
+          <div class="bar-container"><div class="bar" style="height: 80%"></div><span class="bar-label">Computers</span></div>
+          <div class="bar-container"><div class="bar" style="height: 60%"></div><span class="bar-label">Monitors</span></div>
+          <div class="bar-container"><div class="bar" style="height: 30%"></div><span class="bar-label">Network</span></div>
+          <div class="bar-container"><div class="bar" style="height: 50%"></div><span class="bar-label">Mobile</span></div>
+          <div class="bar-container"><div class="bar" style="height: 40%"></div><span class="bar-label">Peripherals</span></div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Upcoming Expirations -->
+    <mat-card>
+      <mat-card-header class="flex-between w-100">
+        <mat-card-title>Upcoming Expirations</mat-card-title>
+        <button mat-button color="primary" routerLink="/licenses">View all</button>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let exp of upcomingExpirations">
+            <mat-icon matListItemIcon class="expiration-icon text-secondary">workspace_premium</mat-icon>
+            <span matListItemTitle>{{ exp.name }}</span>
+            <span matListItemLine class="text-muted">{{ exp.licenses }} licenses expiring</span>
+            <span matListItemMeta class="error-text expiration-date">{{ exp.date }}</span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions -->
+    <mat-card class="quick-actions-card">
+      <mat-card-header>
+        <mat-card-title>Quick Actions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quick-actions-grid">
+          <button mat-stroked-button class="quick-action-btn" routerLink="/assets/new">
+            <mat-icon color="primary">add_circle</mat-icon> Add New Asset
+          </button>
+          <button mat-stroked-button class="quick-action-btn" routerLink="/users/new">
+            <mat-icon color="primary">person_add</mat-icon> New User
+          </button>
+          <button mat-stroked-button class="quick-action-btn" routerLink="/assets">
+            <mat-icon color="primary">logout</mat-icon> Checkout Asset
+          </button>
+          <button mat-stroked-button class="quick-action-btn" routerLink="/assets">
+            <mat-icon color="primary">login</mat-icon> Checkin Asset
+          </button>
+          <button mat-stroked-button class="quick-action-btn" routerLink="/licenses/new">
+            <mat-icon color="primary">key</mat-icon> Add License
+          </button>
+          <button mat-stroked-button class="quick-action-btn" routerLink="/dashboard">
+            <mat-icon color="primary">assessment</mat-icon> View Reports
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

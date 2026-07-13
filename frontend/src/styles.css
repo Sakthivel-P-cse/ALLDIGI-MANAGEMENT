@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  /* Enterprise Colors - Strict Light Theme */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  
+  --bg-color: #F8FAFC;
+  --surface-color: #FFFFFF;
+  
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  
+  --border-color: #E5E7EB;
+  --hover-color: rgba(37, 99, 235, 0.04);
+  
+  /* Status Colors */
+  --success: #22C55E;
+  --success-bg: #DCFCE7;
+  --warning: #F59E0B;
+  --warning-bg: #FEF3C7;
+  --error: #EF4444;
+  --error-bg: #FEE2E2;
+  --info: #3B82F6;
+  --info-bg: #DBEAFE;
+
+  /* Typography */
+  --font-body: 'Inter', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Spacing (8px system) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* Borders & Shadows */
+  --border-radius: 8px;
+  --border-radius-sm: 4px;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* Ensure no dark mode overrides */
+* {
+  box-sizing: border-box;
+}
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  margin-top: 0;
+  font-weight: 600;
+}
+
+h1 { font-size: 1.5rem; margin-bottom: var(--space-3); }
+h2 { font-size: 1.25rem; margin-bottom: var(--space-2); }
+h3 { font-size: 1.125rem; margin-bottom: var(--space-2); }
+h4 { font-size: 1rem; margin-bottom: var(--space-1); }
+h5 { font-size: 0.875rem; margin-bottom: var(--space-1); }
+h6 { font-size: 0.75rem; margin-bottom: var(--space-1); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+
+p {
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+/* Base Classes */
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mr-1 { margin-right: var(--space-1); }
+.mr-2 { margin-right: var(--space-2); }
+.p-0 { padding: 0 !important; }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.w-100 { width: 100%; }
+.font-medium { font-weight: 500; color: var(--text-primary) !important; }
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Angular Material Overrides for Enterprise Look */
+.mat-mdc-card {
+  box-shadow: var(--shadow-sm) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  background-color: var(--surface-color) !important;
+  color: var(--text-primary) !important;
+  padding: var(--space-3) !important;
+}
+
+.mat-mdc-card-header {
+  padding: 0 0 var(--space-2) 0 !important;
+}
+
+.mat-mdc-card-header-text {
+  margin: 0 !important;
+}
+
+.mat-mdc-card-title {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.mat-mdc-card-content {
+  padding: 0 !important;
+}
+
+/* Buttons */
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, .mat-mdc-outlined-button {
+  font-family: var(--font-body) !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-raised-button.mat-primary, .mat-mdc-unelevated-button.mat-primary {
+  background-color: var(--primary) !important;
+}
+
+/* Tables */
+.mat-mdc-table {
+  background: var(--surface-color) !important;
+  width: 100%;
+}
+
+.mdc-data-table__header-row {
+  height: 40px !important;
+}
+
+.mdc-data-table__row {
+  height: 48px !important;
+}
+
+.mdc-data-table__header-cell {
+  background-color: var(--surface-color) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 16px !important;
+}
+
+.mdc-data-table__cell {
+  color: var(--text-primary) !important;
+  font-size: 0.875rem !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 0 16px !important;
+}
+
+.mat-mdc-row:hover .mdc-data-table__cell {
+  background-color: var(--hover-color);
+}
+
+/* Forms */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: var(--border-radius-sm);
+  --mdc-outlined-text-field-outline-color: var(--border-color);
+  --mdc-outlined-text-field-hover-outline-color: var(--text-secondary);
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  --mdc-text-field-label-ink-color: var(--text-secondary);
+}
+
+/* Chips */
+.mat-mdc-chip {
+  font-weight: 500 !important;
+  border-radius: var(--border-radius-sm) !important;
+  font-size: 0.75rem !important;
+  height: 24px !important;
+}
+
+/* Tabs */
+.mat-mdc-tab-header {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.mat-mdc-tab .mdc-tab__text-label {
+  color: var(--text-secondary) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--primary) !important;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-3);
+  padding: 0;
+}
+
+.page-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.page-header .text-muted {
+  margin-bottom: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Status Chips (Enterprise specific) */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--border-radius-sm);
+  white-space: nowrap;
+}
+
+.status-chip.available, .status-chip.success {
+  background-color: var(--success-bg);
+  color: var(--success);
+}
+.status-chip.checked-out, .status-chip.info {
+  background-color: var(--info-bg);
+  color: var(--info);
+}
+.status-chip.pending, .status-chip.warning {
+  background-color: var(--warning-bg);
+  color: var(--warning);
+}
+.status-chip.error, .status-chip.lost {
+  background-color: var(--error-bg);
+  color: var(--error);
+}
+.status-chip.archived, .status-chip.default {
+  background-color: var(--bg-color);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+/* Forms layout */
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .form-container {
+    grid-template-columns: 1fr 1fr;
+  }
+  .full-width {
+    grid-column: span 2;
+  }
+}
+
+/* Standard Table Fallbacks (To match Material Tables) */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-color);
+  font-size: 0.875rem;
+}
+.table thead th {
+  background-color: var(--surface-color);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 16px;
+  height: 40px;
+  text-align: left;
+}
+.table tbody td {
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0 16px;
+  height: 48px;
+}
+.table tbody tr:hover td {
+  background-color: var(--hover-color);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--hover-color);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
