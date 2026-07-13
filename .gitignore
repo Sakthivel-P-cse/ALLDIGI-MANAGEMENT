@@ -1,0 +1,54 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.swp
+*.swo
+*~
+
+# Logs, caches, and temporary files
+*.log
+*.tmp
+*.temp
+*.cache
+.cache/
+tmp/
+temp/
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Node.js, Angular, and Next.js
+**/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend-react/.next/
+frontend-react/out/
+*.tsbuildinfo
+
+# Python (tooling)
+__pycache__/
+*.py[cod]
+
+# Docker local state
+docker-compose.override.yml
+*.pid
