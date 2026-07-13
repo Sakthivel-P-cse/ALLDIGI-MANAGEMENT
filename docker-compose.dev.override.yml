@@ -1,0 +1,4 @@
+services:
+  api:
+    environment:
+      CorsOrigins__0: http://localhost:4200
